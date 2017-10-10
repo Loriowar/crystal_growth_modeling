@@ -12,7 +12,7 @@ if is_integer(index)
     ret = ( physic_grid_current(index) - ...
             physic_grid_previous(index) )/tau_step;
 else
-    % not used
+    % NOTE maybe it is unused case
 end
 
 end

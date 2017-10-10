@@ -8,9 +8,12 @@ function [ ret ] = z_eta_half_time( index, physic_grid_previous, physic_grid_cur
 %                           calculate derivarive with second approximation order
 % eta_step - step by mathematic grid
 
+% TODO investigate variable additional_border_nodes. Is it different for
+%      previous and current grids or not?
 previous_time_z_eta = z_eta( index, physic_grid_previous, additional_border_nodes_prev, eta_step );
 current_time_z_eta = z_eta( index, physic_grid_current, additional_border_nodes_cur, eta_step );
 
+% QUESTION maybe we must divide on tau_step?
 ret = (previous_time_z_eta + current_time_z_eta)/2;
 
 end

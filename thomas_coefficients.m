@@ -26,6 +26,10 @@ border_nodes = [k_star-1, k_star, k_star+1]; % depricated
 % generate array without SL border indexes
 coef_without_borders_solid = all_parts_coef(2:k_star-2);
 coef_without_borders_liquid = all_parts_coef(k_star+2:end-1);
+% coef_without_borders = remove_from_array(all_parts_coef, border_nodes);
+% and without first and last index, it set in Thomas Method bu kappa and mu variables
+% coef_without_borders(1) = [];
+% coef_without_borders(end) = [];
 
 % prepare function for simple assing coefficients
 C_coef_simp = @(k_index) C_coef( k_index, k_star, ...
@@ -47,7 +51,7 @@ T_simp = @(T_index) T_var( T_index, T_array, T_borders );
 % generate coefficients
 % coefficients for solid part
 alpha = alpha_sl(1);
-for i = coef_without_borders_solid
+for i = coef_without_borders_solid % in document i = 0..k*-2
     a(i) = alpha*C_S_coef_simp(i) - delta*z_tau_simp(i);
     b(i) = alpha*C_S_coef_simp(i+1) + delta*z_tau_simp(i+1);
     c(i) = alpha*C_S_coef_simp(i) + delta*z_tau_simp(i) + ...
@@ -61,7 +65,7 @@ end
 
 % coefficients for liquid part
 alpha = alpha_sl(2);
-for i = coef_without_borders_liquid
+for i = coef_without_borders_liquid % in document i = k*+1...K-1
     a(i) = alpha*C_L_coef_simp(i) - delta*z_tau_simp(i);
     b(i) = alpha*C_L_coef_simp(i+1) + delta*z_tau_simp(i+1);
     c(i) = alpha*C_L_coef_simp(i) + delta*z_tau_simp(i) + ...
@@ -72,6 +76,18 @@ for i = coef_without_borders_liquid
            delta*z_tau_simp(i+1)*(T_simp(i+3/2) + T_simp(i+1/2)) - ...
            delta*z_tau_simp(i)*(T_simp(i+1/2) + T_simp(i-1/2));
 end
+% NOTE: through filling coefficient is imposible. It depend from different
+% coefficients (alpha, which depend from lambda in solid and liquid)
+% for i = coef_without_borders % in document i = 0..k*-2
+%     a(i) = alpha*C_coef_simp(i) - delta*z_tau_simp(i);
+%     b(i) = alpha*C_coef_simp(i+1) + delta*z_tau_simp(i+1);
+%     c(i) = alpha*C_coef_simp(i) + delta*z_tau_simp(i) + ...
+%            alpha*C_coef_simp(i+1) - delta*z_tau_simp(i+1) + psi_next(i+1/2);
+%     F(i) = psi_prev(i+1/2)*T_simp(i+1/2) + alpha*C_coef_simp(i+1) - ...
+%            alpha*C_coef_simp(i)*(T_simp(i+1/2) - T_simp(i-1/2)) + ...
+%            delta*z_tau_simp(i+1)*(T_simp(i+3/2) + T_simp(i+1/2)) - ...
+%            delta*z_tau_simp(i)*(T_simp(i+1/2) + T_simp(i-1/2));
+% end
 
 % last node in solid
 alpha = alpha_sl(1);
@@ -110,7 +126,7 @@ F(i) = -beta*(C_L_coef_simp(i) + ...
         lambda_sl*C_S_coef_simp(i)*beta*T_simp(i - 1/2) + ...
         C_L_coef_simp(i)*beta*T_simp(i+1/2);
 
-% remove empty elements (first and last)
+% remove empty elements (first and last(?))
 a(1) = [];
 b(1) = [];
 c(1) = [];

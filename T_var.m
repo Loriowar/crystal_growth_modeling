@@ -5,7 +5,7 @@ function [ ret ] = T_var( index, T_array, T_borders )
 
 real_T_array = [T_borders(1), T_array, T_borders(2)];
 if is_integer(index)
-    % not used
+    % TODO
 else
     real_index = index + 1/2;
     ret = real_T_array(real_index);

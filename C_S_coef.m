@@ -8,6 +8,7 @@ function [ ret ] = C_S_coef( k_index, k_star, ...
 % physic_grid_current - real physical grid on current time step
 % eta_step - step by mathematic grid
 
+
 if k_index == 1
     % first approximation order
     cur_z_eta_val = (physic_grid_current(k_index + 1) - physic_grid_current(k_index))/eta_step;
